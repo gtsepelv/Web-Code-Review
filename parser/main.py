@@ -1,7 +1,8 @@
 import requests
 from pymongo import MongoClient
+import json
 
-client = MongoClient("mongodb", 27017)
+client = MongoClient("localhost", 27017)
 db = client.citilink
 collection = db.products
 
@@ -114,7 +115,8 @@ def get_data():
         .get("record")
         .get("products")
     }
-
-    # print(str(products).replace(", ", ",\n "))
-    collection.delete_one(products)
-    collection.insert_one(products)
+    products_json = json.dumps(products, indent=2, ensure_ascii=False)
+    products_dict = json.loads(products_json)
+    # print(products_dict)
+    collection.delete_one(products_dict)
+    collection.insert_one(products_dict)
